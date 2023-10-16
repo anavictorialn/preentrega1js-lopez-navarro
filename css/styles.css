@@ -1,0 +1,239 @@
+@charset "UTF-8";
+/*Resoluciones de pantalla*/
+/*Mixins*/
+html { /*etiqueta raíz*/
+  font-size: 62.5%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: rgb(120, 113, 97);
+  font-size: medium;
+}
+
+a {
+  text-decoration: none;
+  font-size: large;
+}
+
+h1 {
+  color: darkgoldenrod;
+  text-align: center;
+  font-size: xx-large;
+}
+
+/*Animación de transición*/
+h1 {
+  transition: all 0.2s;
+}
+h1:hover {
+  background-color: rgb(120, 113, 97);
+  color: black;
+}
+
+p {
+  font-size: medium;
+}
+
+img {
+  max-width: 100%;
+}
+
+.lista-nav {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.img-logo-evadla {
+  width: 35px;
+}
+
+.row {
+  background-color: rgb(120, 113, 97);
+  font-size: medium;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  margin-right: 20px;
+  margin-left: 20px;
+  padding: 10px;
+}
+
+.fondobeige {
+  background-color: rgb(120, 113, 97);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1.8rem;
+  margin-right: 20px;
+  margin-left: 20px;
+  padding: 8px;
+  font-style: italic;
+}
+
+.bi {
+  font-size: x-large;
+}
+
+.bi-instagram {
+  color: rgb(166, 67, 83);
+}
+
+.bi-tiktok {
+  color: black;
+}
+
+.bi-youtube {
+  color: red;
+}
+
+footer {
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.boton, form .botones-form {
+  border: solid 1px rgb(120, 113, 97);
+  width: 200px;
+  text-align: center;
+  padding: 5px 20px;
+}
+
+.whatsapp {
+  width: 80px;
+  position: fixed;
+  bottom: 0;
+  right: 30px;
+}
+
+/*Filtro*/
+#autoayuda, #novela, #todos {
+  display: none;
+}
+
+.autoayuda, .novela {
+  display: none;
+}
+
+#autoayuda:checked ~ .container-cards .autoayuda, #novela:checked ~ .container-cards .novela {
+  display: flex;
+}
+
+#todos:checked ~ .container-cards .autoayuda, #todos:checked ~ .container-cards .novela {
+  display: flex;
+}
+
+.container-cards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .container-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+  }
+}
+@media (min-width: 992px) {
+  .container-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.card {
+  max-width: 100%;
+}
+
+.card-img-top {
+  height: 200px;
+}
+
+.container-opciones {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+@media (min-width: 560px) {
+  .container-opciones {
+    flex-direction: row;
+  }
+}
+.container-opciones label {
+  border: solid 1px;
+  padding: 8px 15px;
+  width: 150px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #b2b2b2;
+  font-weight: bold;
+}
+
+.container-opciones label:hover {
+  background-color: rgb(120, 113, 97);
+  color: #b2b2b2;
+  border: none;
+  font-weight: bold;
+}
+
+#autoayuda:checked ~ .container-opciones .label-autoayuda,
+#novela:checked ~ .container-opciones .label-novela,
+#todos:checked ~ .container-opciones .label-todos {
+  background-color: rgb(120, 113, 97);
+}
+
+.btn {
+  background-color: #b2b2b2;
+  color: black;
+  border: none;
+  font-weight: bold;
+}
+.btn:hover {
+  background-color: rgb(120, 113, 97);
+  color: #b2b2b2;
+}
+
+.main-contacto {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  font-size: large;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  /*Anidación y Extend*/
+}
+form .botones-form {
+  background-color: #b2b2b2;
+  font-weight: bold;
+  transition: ease-in 0.4s;
+}
+form .botones-form:hover {
+  background-color: rgb(120, 113, 97);
+  color: #b2b2b2;
+}
+
+/*# sourceMappingURL=styles.css.map */

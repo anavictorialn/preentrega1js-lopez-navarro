@@ -1,0 +1,23 @@
+.main-contacto {
+    @include flex-columna;
+    gap: $espaciado-general * 2;
+    font-size: large;
+}
+
+form {
+    @include flex-columna;
+    gap: $espaciado-general;
+
+    /*Anidación y Extend*/
+    .botones-form {
+        @extend .boton;
+        background-color: $color-secundario;
+        font-weight: bold;
+        transition: ease-in .4s;
+
+        &:hover {
+            background-color: $color-primario;
+            color: $color-secundario;
+        }
+    }
+}

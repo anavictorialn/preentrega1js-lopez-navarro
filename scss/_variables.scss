@@ -1,0 +1,26 @@
+$color-primario: rgb(120, 113, 97);
+$color-secundario: #b2b2b2;
+$color-titles: darkgoldenrod;
+$size-h1: xx-large;
+$espaciado-general: 20px;
+$icono: 40px;
+
+/*Resoluciones de pantalla*/
+$tablet: 768px;
+$desktop: 992px;
+$desktopXG: 1200PX;
+
+/*Mixins*/
+@mixin flex-columna {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin flex-fila {
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}

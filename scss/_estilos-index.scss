@@ -1,0 +1,92 @@
+/*Filtro*/
+#autoayuda, #novela, #todos {
+    display: none;
+}
+
+.autoayuda, .novela {
+    display: none;
+}
+
+#autoayuda:checked ~ .container-cards .autoayuda, #novela:checked ~ .container-cards .novela {
+    display: flex;
+}
+
+#todos:checked ~ .container-cards .autoayuda, #todos:checked ~ .container-cards .novela {
+    display: flex;
+}
+
+.container-cards {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+@media (min-width: $tablet) {
+    .container-cards {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+justify-items: center;
+    }
+}
+
+@media (min-width: $desktop) {
+    .container-cards {
+grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.card {
+    max-width: 100%;
+}
+
+.card-img-top {
+    height: 200px;
+}
+
+.container-opciones {
+    @include flex-columna;
+    gap: 20px;
+}
+
+@media (min-width: 560px) {
+    .container-opciones {
+        flex-direction: row;
+    }
+}
+
+.container-opciones label {
+    border: solid 1px;
+    padding: 8px 15px;
+    width: 150px;
+    text-align: center;
+    cursor: pointer;
+    background-color: $color-secundario;
+    font-weight: bold;
+}
+
+.container-opciones label:hover {
+    background-color: $color-primario;
+    color: $color-secundario;
+    border: none;
+    font-weight: bold;
+}
+
+#autoayuda:checked ~ .container-opciones .label-autoayuda,
+#novela:checked ~ .container-opciones .label-novela,
+#todos:checked ~ .container-opciones .label-todos {
+    background-color: $color-primario;
+}
+
+.btn {
+    background-color: $color-secundario;
+    color: black;
+    border: none;
+    font-weight: bold;
+
+    &:hover {
+        background-color: $color-primario;
+        color: $color-secundario;
+    }
+}
