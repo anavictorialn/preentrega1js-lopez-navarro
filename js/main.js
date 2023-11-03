@@ -1,107 +1,142 @@
+//Objetos
+class Producto {
+
+    constructor (nombre, precio, stock) {
+        this.nombre = nombre;
+        this.precio = precio;
+        this.stock = stock;
+
+    }
+}
+
 //Funciones
-function concatenarCodigos(codigoDeLibro) {
-    if(codigosDeLibros !== "") {
-        codigosDeLibros += ", ";
-    }
+function existeElProducto(nombreDeProducto) {
+    let encontrado = false;
 
-    codigosDeLibros += codigoDeLibro;
-}
+    for(const producto of ListaDeProductos) {
 
-function agregarUnNuevoLibro() {
-    let codigoDeLibro = prompt("Ingrese el código del libro / 001 - $300 / 002 - $250 / 003 - $200 / 004 - $250 / 005 - $200 / 006 - $180/ 007 - $120 / 008 - $250 / 009 - $150/ 0 - Salir");
-
-    while(codigoDeLibro !== "0") {
-        
-        switch(codigoDeLibro) {
-            case "001":
-                concatenarCodigos(codigoDeLibro)
-                total += 300;
-                break;
-
-            case "002":
-                concatenarCodigos(codigoDeLibro)
-                total += 250;
-                break;
-
-            case "003":
-                concatenarCodigos(codigoDeLibro)
-                total += 200;
-                break;
-
-            case "004":
-                concatenarCodigos(codigoDeLibro)
-                total += 250;
-                break;
-            
-            case "005":
-                concatenarCodigos(codigoDeLibro)
-                total += 200;
-                break;
-
-            case "006":
-                concatenarCodigos(codigoDeLibro)
-                total += 180;
-                break;
-
-            case "007":
-                concatenarCodigos(codigoDeLibro)
-                total += 120;
-                break;
-
-            case "008":
-                concatenarCodigos(codigoDeLibro)
-                total += 250;
-                break;
-
-            case "009":
-                concatenarCodigos(codigoDeLibro)
-                total += 150;
-                break;
-
-            default:
-                alert("Código incorrecto");
-                break;
+        if(producto.nombre === nombreDeProducto) {
+            encontrado = true;
+            break;
         }
-
-        //Volvemos a solicitar el código
-        codigoDeLibro = prompt("Ingrese el código del libro / 001 - $300 / 002 - $250 / 003 - $200 / 004 - $250 / 005 - $200 / 006 - $180/ 007 - $120 / 008 - $250 / 009 - $150/ 0 - Salir");
     }
+
+    return encontrado;
 }
 
-function mostrarEltotal() {
-    alert("Los libros agregados son: " + codigosDeLibros + ". El total de los productos es $" + total);
+function agregarUnProducto() {
+    let productoAIngresar = prompt("Ingrese el nombre del libro que quiere agregar");
+
+    //Mientras no exista un producto con el nombre que ingresó el usuario, se lo vuelvo a pedir
+    while (!existeElProducto(productoAIngresar)) {
+        productoAIngresar = prompt("Ingrese un nombre válido");
+    }
+
+    //Pedirle el stock
+    let stock = parseInt(prompt("Ingrese cuántos libros desea"));
+
+    while (stock <= 0) {
+        stock = parseInt(prompt("Ingrese una cantidad válidad (mayor a 0)"));
+    }
+
+    //Lo cargamos al carrito
+    carrito.push({
+        nombre: productoAIngresar,
+        cantidad: stock,
+    });
+
+    alert("Producto agregado");
 }
 
-function pedirOperacion() {
-    return prompt("¿Qué operación desea realizar? 1- Ingresar nuevo libro / 2- Ver total de los libros ingresados / 0- Salir");
-}
+function finalizarCompra() {
+    let mensaje = "Los libros agregados son: ";
 
+    for(const productoAgregadoAlCarrito of carrito) {
+        mensaje += productoAgregadoAlCarrito.nombre + " - Cantidad: " + productoAgregadoAlCarrito.cantidad + "\n";
+    }
+
+    alert(mensaje); 
+}
 
 //Inicio del programa
-let total = 0;
-let codigosDeLibros = "";
-let operacion = pedirOperacion();
+const ListaDeProductos = [
+    new Producto("El poder del ahora", 300, 10),
+    new Producto("Este dolor no es mío", 250, 8),
+    new Producto("Muchas vidas, muchos maestros", 200, 15),
+];
 
-while(operacion !== "0") {
+const carrito = [];
 
+let operacion = prompt("Ingrese la operación que desea realizar: 1-Agregar un libro / 2-Finalizar la compra / 0-Salir");
+
+while (operacion !== "0") {
+    
     switch(operacion) {
-        case "1":
-            //Usuario quiere agregar un nuevo libro
-            agregarUnNuevoLibro();
+        case "1" :
+        //Agregar un producto
+            agregarUnProducto();
             break;
 
-        case "2":
-            //Usuario quiere ver el total de los libros ingresados
-            mostrarEltotal();
+        case "2" :
+        //Finalizar la compra
+            finalizarCompra();
             break;
 
         default:
-            alert("Ingrese un valor correcto")
+            alert("Ingrese una opción correcta")
             break;
     }
 
-    //Volvemos a pedir la operación
-    operacion = pedirOperacion();
+    //Volvemos a solicitar la operación
+    operacion = prompt("Ingrese la operación que desea realizar: 1-Agregar un libro / 2-Finalizar la compra / 0-Salir");
 }
 
-alert("Gracias por visitar nuestra tienda de libros, regrese pronto");
+
+/*Proceso para calcular envío de los libros */
+//Funciones
+function calcularEnvioAutoayuda(precio) {
+    return 20 + (precio * 0.05);
+}
+
+function calcularEnvioNovela(precio) {
+    return 30 + (precio * 0.05);
+}
+
+function calcularEnvio(Libro, funcionQueCalculaElEnvio) {
+    
+    let costo = funcionQueCalculaElEnvio(Libro.precio);
+    
+    return costo;
+}
+
+//Objetos
+class Libro {
+
+    constructor (nombre, categoria, precio) {
+        this.nombre = nombre;
+        this.categoria = categoria;
+        this.precio = precio;
+    }
+}
+
+const libro1 = new Libro("El poder del ahora", "Autoayuda", 300);
+const libro2 = new Libro("Este dolor no es mío", "Autoayuda", 250);
+const libro3 = new Libro("Muchas vidas, muchos maestros", "Autoayuda", 200);
+const libro4 = new Libro("El método de Wim Hof", "Autoayuda", 300);
+const libro5 = new Libro("Los cuatro acuerdos", "Autoayuda", 200);
+const libro6 = new Libro("El alquimista", "Novela", 180);
+const libro7 = new Libro("El principito", "Novela", 120);
+const libro8 = new Libro("El fantasma de la ópera", "Novela", 250);
+const libro9 = new Libro("Hasta que te vuelva a ver", "Novela", 150);
+
+const costoPoderDelAhora = calcularEnvio(libro1, calcularEnvioAutoayuda);
+const costoNoEsMio = calcularEnvio(libro2, calcularEnvioAutoayuda);
+const costoMuchasVidas = calcularEnvio(libro3, calcularEnvioAutoayuda);
+const costoWimHof = calcularEnvio(libro4, calcularEnvioAutoayuda);
+const costoLosCuatroAcuerdos = calcularEnvio(libro5, calcularEnvioAutoayuda);
+const costoElAlquimista = calcularEnvio(libro6, calcularEnvioNovela);
+const costoElPrincipito = calcularEnvio(libro7, calcularEnvioNovela);
+const costoElFantasmaDeLaOpera = calcularEnvio(libro8, calcularEnvioNovela);
+const costoHastaQue = calcularEnvio(libro9, calcularEnvioNovela);
+
+//console.log(costoPoderDelAhora);
