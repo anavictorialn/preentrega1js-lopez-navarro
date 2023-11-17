@@ -1,142 +1,279 @@
-//Objetos
+//Clases
 class Producto {
-
-    constructor (nombre, precio, stock) {
+    constructor(nombre, precio, stock) {
         this.nombre = nombre;
         this.precio = precio;
         this.stock = stock;
-
     }
 }
 
 //Funciones
-function existeElProducto(nombreDeProducto) {
-    let encontrado = false;
 
-    for(const producto of ListaDeProductos) {
+function ordenarPorPrecioAscendente() {
 
-        if(producto.nombre === nombreDeProducto) {
-            encontrado = true;
-            break;
+    const productosOrdenadosAscendentemente = listadoDeProductos.sort( (productoA, productoB) => {
+
+        if(productoA.precio > productoB.precio) {
+            return 1;
+        } else if(productoA.precio < productoB.precio) {
+            return -1;
+        }
+
+        return 0;
+    });
+
+    // Renderizo los productos
+    renderizarProductos(productosOrdenadosAscendentemente);
+
+}
+
+function ordenarPorPrecioDescendente() {
+
+    const productosOrdenadosDescendentemente = listadoDeProductos.sort( (productoA, productoB) => {
+
+        if(productoA.precio < productoB.precio) {
+            return 1;
+        } else if(productoA.precio > productoB.precio) {
+            return -1;
+        }
+
+        return 0;
+    });
+
+    // Renderizo los productos
+    renderizarProductos(productosOrdenadosDescendentemente);
+
+}
+
+function inicializarSelect() {
+    const select = document.getElementById("selectOrden");
+
+    select.addEventListener("change", () => {
+
+        const value = select.value;
+
+        switch(value) {
+            case 'precio':
+
+                ordenarPorPrecioAscendente();
+
+                break;
+
+            case 'nombre':
+                
+                ordenarPorPrecioDescendente();
+
+                break;
+        }
+    });
+}
+
+function inicializarInput() {
+
+    const input = document.getElementById("buscarProducto");
+
+    input.addEventListener("keyup", () => {
+        
+        //Filtramos los libros por lo que puso el usuario en el input
+        const value = input.value;
+        
+        const productosFiltrados = listadoDeProductos.filter( (producto) => {
+            return producto.nombre.toLowerCase().includes(value.toLowerCase());
+        });
+        
+        //Renderizo los productos
+        renderizarProductos(productosFiltrados);
+    });
+}
+
+function eliminarProducto(producto) {
+    
+    // Busco el producto a eliminar del carrito por el nombre
+    const indiceProductoAEliminar = carrito.findIndex( (el) => {
+        return producto.nombre === el.nombre;
+    });
+
+    // Si el índice del producto a eliminar existe
+    if(indiceProductoAEliminar !== -1) {
+
+        // Elimino el producto del carrito
+        carrito.splice(indiceProductoAEliminar, 1);
+
+        // Actualizo localStorage
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+
+        renderizarTablaCarrito(carrito);
+    }
+
+}
+
+function obtenerProductosEnLS() {
+    carrito = JSON.parse(localStorage.getItem("carrito"));
+
+    if(carrito) {
+        renderizarTablaCarrito(carrito);
+    }
+}
+
+function guardarProductoEnLS(producto, cantidad) {
+
+    const productoAAgregar = {
+        nombre: producto.nombre,
+        precio: producto.precio,
+        cantidad: parseInt(cantidad),
+    };
+
+    // No hay productos en local Storage
+    if(carrito === null) {
+
+        carrito = [productoAAgregar];
+
+    } else {
+
+        // Busco el índice del producto en el array del localstorage para editarlo si existe
+        const indiceExisteProducto = carrito.findIndex( (el) => {
+            return el.nombre === productoAAgregar.nombre;
+        });
+
+        // Si el producto no existe en el localstorage, lo agrego
+        if(indiceExisteProducto === -1) {
+            carrito.push(productoAAgregar);
+        } else {
+            // Si existe, a la cantidad del producto que está en localstorage, le sumo la nueva cantidad
+            carrito[indiceExisteProducto].cantidad += parseInt(cantidad);
         }
     }
 
-    return encontrado;
+    // Actualizo localStorage
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+
+    renderizarTablaCarrito(carrito);
+
 }
 
-function agregarUnProducto() {
-    let productoAIngresar = prompt("Ingrese el nombre del libro que quiere agregar");
+function renderizarTablaCarrito(productosCarrito) {
 
-    //Mientras no exista un producto con el nombre que ingresó el usuario, se lo vuelvo a pedir
-    while (!existeElProducto(productoAIngresar)) {
-        productoAIngresar = prompt("Ingrese un nombre válido");
+    const tbody = document.querySelector("#carrito table tbody");
+    tbody.innerHTML = "";
+
+    for(const productoCarrito of productosCarrito) {
+
+        const tr = document.createElement("tr");
+
+        const tdNombre = document.createElement("td");
+        tdNombre.innerText = productoCarrito.nombre;
+
+        const tdPrecio = document.createElement("td");
+        tdPrecio.innerText = `$${productoCarrito.precio}`;
+
+        const tdCantidad = document.createElement("td");
+        tdCantidad.innerText = productoCarrito.cantidad;
+
+        const tdEliminar = document.createElement("td");
+
+        const botonEliminar = document.createElement("button");
+        botonEliminar.className = "btn btn-danger";
+        botonEliminar.innerText = "Eliminar";
+
+        // Agregar evento al boton
+        botonEliminar.addEventListener("click", () => {
+            eliminarProducto(productoCarrito);
+        });
+
+        // Agregar elementos uno adentro de otro
+        tdEliminar.append(botonEliminar);
+        tr.append(tdNombre, tdPrecio, tdCantidad, tdEliminar);
+
+        tbody.append(tr);
     }
-
-    //Pedirle el stock
-    let stock = parseInt(prompt("Ingrese cuántos libros desea"));
-
-    while (stock <= 0) {
-        stock = parseInt(prompt("Ingrese una cantidad válidad (mayor a 0)"));
-    }
-
-    //Lo cargamos al carrito
-    carrito.push({
-        nombre: productoAIngresar,
-        cantidad: stock,
-    });
-
-    alert("Producto agregado");
 }
 
-function finalizarCompra() {
-    let mensaje = "Los libros agregados son: ";
+function renderizarProductos(productos) {
+    const contenedor = document.getElementById("contenedor");
+    contenedor.innerHTML = "";
 
-    for(const productoAgregadoAlCarrito of carrito) {
-        mensaje += productoAgregadoAlCarrito.nombre + " - Cantidad: " + productoAgregadoAlCarrito.cantidad + "\n";
+    /* 
+    <div class="card autoayuda" style="width: 18rem;">
+        <img src="img/ElPoderDelAhora.png" class="card-img-top" alt="Libro El poder del ahora">
+        <div class="card-body">
+            <h5 class="card-title">Código 001</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <button type="button" class="btn btn-primary">Comprar</a>
+        </div>
+    </div>
+    */
+
+    for(const producto of productos) {
+
+        //Crear los elementos dinámicamente
+        const divPadre = document.createElement("div");
+        divPadre.className = "card autoayuda";
+
+        const divCardBody = document.createElement("div");
+        divCardBody.className = "card-body";
+
+        const h5 = document.createElement("h5");
+        h5.className = "card-title";
+        h5.innerText = producto.nombre;
+
+        const p = document.createElement("h5");
+        p.className = "card-text";
+        p.innerHTML = `<strong>Precio:</strong> $${producto.precio} - <strong>Stock:</strong> ${producto.stock}`;
+
+        const divAgregarAlCarrito = document.createElement("div");
+        divAgregarAlCarrito.className = "d-flex align-items-center";
+
+
+        const button = document.createElement("button");
+        button.className = "btn btn-primary";
+        button.innerText = "Agregar al carrito";
+
+        const inputCantidad = document.createElement("input");
+        inputCantidad.type = "number";
+        inputCantidad.className = "form-control";
+        inputCantidad.value = 1;
+
+        //Agregar al carrito
+        button.addEventListener("click", () => {
+            
+             // Obtenemos la cantidad del input
+            const cantidad = inputCantidad.value;
+
+            if(cantidad > producto.stock) {
+
+            alert("NO HAY SUFICIENTE STOCK");
+
+            } else {
+
+            // Agregar producto a Local Storage
+            guardarProductoEnLS(producto, cantidad);
+            }
+        });
+
+        //Insertar elementos adentro de otro
+        divAgregarAlCarrito.append(button, inputCantidad);
+        divCardBody.append(h5, p, button, divAgregarAlCarrito);
+        divPadre.append(divCardBody);
+        contenedor.append(divPadre);
     }
-
-    alert(mensaje); 
 }
 
 //Inicio del programa
-const ListaDeProductos = [
-    new Producto("El poder del ahora", 300, 10),
-    new Producto("Este dolor no es mío", 250, 8),
-    new Producto("Muchas vidas, muchos maestros", 200, 15),
-];
+const listadoDeProductos = [
+    new Producto("El poder del ahora", 300, 40),
+    new Producto("Este dolor no es mío", 250, 70),
+    new Producto("Muchas vidas, muchos maestros", 200, 30),
+    new Producto("El método de Wim Hof", 250, 80),
+    new Producto("Los cuatro acuerdos", 200, 45),
+    new Producto("El alquimista", 180, 50),
+    new Producto("El principito", 120, 50),
+    new Producto("El fantasma de la ópera", 250, 90),
+    new Producto("Hasta que te vuelva a ver", 150, 60),
+]
 
-const carrito = [];
+let carrito = [];
 
-let operacion = prompt("Ingrese la operación que desea realizar: 1-Agregar un libro / 2-Finalizar la compra / 0-Salir");
-
-while (operacion !== "0") {
-    
-    switch(operacion) {
-        case "1" :
-        //Agregar un producto
-            agregarUnProducto();
-            break;
-
-        case "2" :
-        //Finalizar la compra
-            finalizarCompra();
-            break;
-
-        default:
-            alert("Ingrese una opción correcta")
-            break;
-    }
-
-    //Volvemos a solicitar la operación
-    operacion = prompt("Ingrese la operación que desea realizar: 1-Agregar un libro / 2-Finalizar la compra / 0-Salir");
-}
-
-
-/*Proceso para calcular envío de los libros */
-//Funciones
-function calcularEnvioAutoayuda(precio) {
-    return 20 + (precio * 0.05);
-}
-
-function calcularEnvioNovela(precio) {
-    return 30 + (precio * 0.05);
-}
-
-function calcularEnvio(Libro, funcionQueCalculaElEnvio) {
-    
-    let costo = funcionQueCalculaElEnvio(Libro.precio);
-    
-    return costo;
-}
-
-//Objetos
-class Libro {
-
-    constructor (nombre, categoria, precio) {
-        this.nombre = nombre;
-        this.categoria = categoria;
-        this.precio = precio;
-    }
-}
-
-const libro1 = new Libro("El poder del ahora", "Autoayuda", 300);
-const libro2 = new Libro("Este dolor no es mío", "Autoayuda", 250);
-const libro3 = new Libro("Muchas vidas, muchos maestros", "Autoayuda", 200);
-const libro4 = new Libro("El método de Wim Hof", "Autoayuda", 300);
-const libro5 = new Libro("Los cuatro acuerdos", "Autoayuda", 200);
-const libro6 = new Libro("El alquimista", "Novela", 180);
-const libro7 = new Libro("El principito", "Novela", 120);
-const libro8 = new Libro("El fantasma de la ópera", "Novela", 250);
-const libro9 = new Libro("Hasta que te vuelva a ver", "Novela", 150);
-
-const costoPoderDelAhora = calcularEnvio(libro1, calcularEnvioAutoayuda);
-const costoNoEsMio = calcularEnvio(libro2, calcularEnvioAutoayuda);
-const costoMuchasVidas = calcularEnvio(libro3, calcularEnvioAutoayuda);
-const costoWimHof = calcularEnvio(libro4, calcularEnvioAutoayuda);
-const costoLosCuatroAcuerdos = calcularEnvio(libro5, calcularEnvioAutoayuda);
-const costoElAlquimista = calcularEnvio(libro6, calcularEnvioNovela);
-const costoElPrincipito = calcularEnvio(libro7, calcularEnvioNovela);
-const costoElFantasmaDeLaOpera = calcularEnvio(libro8, calcularEnvioNovela);
-const costoHastaQue = calcularEnvio(libro9, calcularEnvioNovela);
-
-//console.log(costoPoderDelAhora);
+renderizarProductos(listadoDeProductos);
+inicializarInput();
+inicializarSelect();
+obtenerProductosEnLS();
