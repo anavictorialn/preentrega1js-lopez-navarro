@@ -177,6 +177,13 @@ function renderizarTablaCarrito(productosCarrito) {
 
         // Agregar evento al boton
         botonEliminar.addEventListener("click", () => {
+            Swal.fire({
+                title: 'Eliminado(s)',
+                text: 'El libro o libros han sido eliminados con éxito',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            })
+
             eliminarProducto(productoCarrito);
         });
 
@@ -248,6 +255,13 @@ function renderizarProductos(productos) {
             // Agregar producto a Local Storage
             guardarProductoEnLS(producto, cantidad);
             }
+
+            Swal.fire({
+                title: 'Agregado(s)',
+                text: 'El libro o libros fueron agregados correctamente',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            })
         });
 
         //Insertar elementos adentro de otro
@@ -257,6 +271,30 @@ function renderizarProductos(productos) {
         contenedor.append(divPadre);
     }
 }
+
+/*
+
+function obtenerProductosJson() {
+    return new Promise( (resolve, reject) => {
+        fetch('/productos.json')
+    .then( (response) => {
+        return response.json();
+    })
+    .then( (responseJson) => {
+
+        for(const producto of responseJson) {
+            const producto = [];
+
+            producto.push();
+        }
+
+        resolve();
+    });
+
+    });
+}
+
+*/
 
 //Inicio del programa
 const listadoDeProductos = [
@@ -277,3 +315,6 @@ renderizarProductos(listadoDeProductos);
 inicializarInput();
 inicializarSelect();
 obtenerProductosEnLS();
+//obtenerProductosJson();
+
+
