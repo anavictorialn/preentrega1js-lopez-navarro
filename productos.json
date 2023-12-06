@@ -1,11 +1,47 @@
 [
-    {"nombre": "El poder del ahora", "precio": 300, "stock": 40},
-    {"nombre": "Este dolor no es mío", "precio": 250, "stock": 70},
-    {"nombre": "Muchas vidas, muchos maestros", "precio": 200, "stock": 30},
-    {"nombre": "El método de Wim Hof", "precio": 250, "stock": 80},
-    {"nombre": "Los cuatro acuerdos", "precio": 200, "stock": 45},
-    {"nombre": "El alquimista", "precio": 180, "stock": 50},
-    {"nombre": "El principito", "precio": 120, "stock": 50},
-    {"nombre": "El fantasma de la ópera", "precio": 250, "stock": 90},
-    {"nombre": "Hasta que te vuelva a ver", "precio": 150, "stock": 60}
+    {
+        "nombre": "El poder del ahora", 
+        "precio": 300, 
+        "stock": 40,
+        "imagen":"img/ElPoderDelAhora.png"},
+    {
+        "nombre": "Este dolor no es mío", 
+        "precio": 250, 
+        "stock": 70,
+        "imagen":"img/EsteDolor.jpg"},
+    {
+        "nombre": "Muchas vidas", 
+        "precio": 200, 
+        "stock": 30,
+        "imagen":"img/MuchasVidas.jpg"},
+    {
+        "nombre": "El método de Wim Hof", 
+        "precio": 250, 
+        "stock": 80,
+        "imagen":"img/WimHof.jpg"},
+    {
+        "nombre": "Los cuatro acuerdos", 
+        "precio": 200, 
+        "stock": 45,
+        "imagen":"img/4acuerdos.jpg"},
+    {
+        "nombre": "El alquimista", 
+        "precio": 180, 
+        "stock": 50,
+        "imagen":"img/ElAlquimista.jpg"},
+    {
+        "nombre": "El principito", 
+        "precio": 120, 
+        "stock": 50,
+        "imagen":"img/elprincipitoEvadla.jpg"},
+    {
+        "nombre": "El fantasma de la ópera", 
+        "precio": 250, 
+        "stock": 90,
+        "imagen":"img/FantasmaOpera.jpg"},
+    {
+        "nombre": "Hasta que te vuelva a ver", 
+        "precio": 150, 
+        "stock": 60,
+        "imagen":"img/HastaQue.jpg"}
 ]

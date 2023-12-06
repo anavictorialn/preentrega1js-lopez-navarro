@@ -275,22 +275,27 @@ function renderizarProductos(productos) {
 /*
 
 function obtenerProductosJson() {
-    return new Promise( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         fetch('/productos.json')
-    .then( (response) => {
-        return response.json();
-    })
-    .then( (responseJson) => {
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('No se pudo cargar el archivo JSON');
+                }
+                return response.json();
+            })
+            .then((responseJson) => {
+                const productos = [];
 
-        for(const producto of responseJson) {
-            const producto = [];
+                for (const productoData of responseJson) {
+                    const producto = new Producto(productoData.nombre, productoData.precio, productoData.stock, productoData.imagen);
+                    productos.push(producto);
+                }
 
-            producto.push();
-        }
-
-        resolve();
-    });
-
+                resolve(productos);
+            })
+            .catch((error) => {
+                reject(error);
+            });
     });
 }
 
